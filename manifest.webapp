@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "name": "Trivia Quiz",
+  "description": "Get smarter every day by answering online quizzes & improve your knowledge in various fields",
+  "launch_path": "/index.html",
+  "theme": "#873eff",
+  "theme_color": "#873eff",
+  "background_color": "#873eff",
+  "categories": [
+    "education"
+  ],
+  "icons": {
+    "56": "/icons/icon56x56.png",
+    "112": "/icons/icon112x112.png"
+  },
+  "developer": {
+    "name": "arma7x",
+    "url": "https://github.com/arma7x"
+  },
+  "origin": "app://trivia-quiz.arma7x.com",
+  "type": "web",
+  "permissions": {},
+  "messages": [],
+  "locales": {
+    "en-US": {
+      "name": "Trivia Quiz",
+      "subtitle": "Get smarter every day by answering online quizzes & improve your knowledge in various fields",
+      "description": "Get smarter every day by answering online quizzes & improve your knowledge in various fields"
+    }
+  },
+  "default_locale": "en-US"
+}

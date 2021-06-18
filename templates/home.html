@@ -1,0 +1,41 @@
+<div class="kui-flex-wrap">
+  <style>
+    .spacer {
+      width: 98%;
+      height: 75%;
+      padding: 1%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-bottom: 2px solid #320374;
+    }
+  </style>
+  <ul class="kui-list kai-container">
+    <li>
+      <input id="amount" class="homeNav kui-input" type="tel" placeholder="Num of question" value="{{ amount }}"/>
+    </li>
+    <li class="homeNav" @click="selectCategory()">
+      <div class="spacer">
+        <div style="font-size:95%;">Please select category:</div>
+        <div style="font-weight:400;margin-bottom:2px;">{{ category.text }}</div>
+      </div>
+    </li>
+    <li class="homeNav" @click="selectDifficulty()">
+      <div class="spacer">
+        <div style="font-size:95%;">Please select difficulty:</div>
+        <div style="font-weight:400;margin-bottom:2px;">{{ difficulty.text }}</div>
+      </div>
+    </li>
+    <li class="homeNav" @click="selectType()">
+      <div class="spacer">
+        <div style="font-size:95%;">Please select type:</div>
+        <div style="font-weight:400;margin-bottom:2px;">{{ type.text }}</div>
+      </div>
+    </li>
+    <li class="homeNav" @click="submit()">
+      <div class="kui-row-center" style="justify-content:space-around;">
+        <h4>SUBMIT</h4>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,45 @@
+<div class="kui-flex-wrap">
+  <style>
+    .spacer {
+      margin-bottom: 8px;
+    }
+    .title {
+      font-size:95%;
+      color:#474747;
+    }
+    .caption {
+      font-weight:bold;
+      margin-bottom:2px;
+    }
+  </style>
+  <div class="kai-container" style="margin:5px;font-size:90%;">
+    <div class="spacer">
+      <div class="title">Question</div>
+      <div class="caption">{{ question.question }}</div>
+    </div>
+    <div class="spacer">
+      <span class="title">Difficulty:</span>
+      <span class="caption">{{ question.difficulty }}</span>
+    </div>
+    <div class="spacer">
+      <div class="title">Category:</div>
+      <div class="caption">{{ question.category }}</div>
+    </div>
+    {{#finish}}
+    <div class="spacer">
+      <div class="title">Your Answer:</div>
+      <div class="caption" style="color:{{#question.correct}}green{{/question.correct}}{{^question.correct}}red{{/question.correct}};">{{ question.your_answer }}</div>
+    </div>
+    <div class="spacer">
+      <div class="title">Correct Answer:</div>
+      <div class="caption" style="">{{ question.correct_answer }}</div>
+    </div>
+    {{/finish}}
+    {{^finish}}
+    <div class="spacer">
+      <div class="title">Your Answer:</div>
+      <div class="caption" style="">{{ question.your_answer }}</div>
+    </div>
+    {{/finish}}
+  </div>
+</div>
