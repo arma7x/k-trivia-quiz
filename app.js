@@ -158,6 +158,7 @@ window.addEventListener("load", function() {
             } 
           },
           showScore: function() {
+            displayKaiAds();
             this.$router.showDialog('Score', `Your score is ${this.data.score}/${LEN}`, null, ' ', () => {}, ' ', () => {}, ' ', null, () => {
                 this.methods.renderQuestion(this.data.index);
             });
