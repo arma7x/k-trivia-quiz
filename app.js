@@ -1,6 +1,3 @@
-// https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple
-// `https://cors.bridged.cc/${url}`
-
 const xhr = function(method, url, data={}, query={}, headers={}) {
   return new Promise((resolve, reject) => {
     var xhttp = new XMLHttpRequest();
@@ -74,25 +71,6 @@ const DIFFICULTY = [
   {"value": "medium", "text": "Medium"},
   {"value": "hard", "text": "Hard"},
 ]
-
-const SEED = {
-  "response_code": 0,
-  "results": [{
-    "category": "General Knowledge",
-    "type": "boolean",
-    "difficulty": "easy",
-    "question": "French is an official language in Canada.",
-    "correct_answer": "True",
-    "incorrect_answers": ["False"]
-  }, {
-    "category": "General Knowledge",
-    "type": "multiple",
-    "difficulty": "easy",
-    "question": "Which one of the following rhythm games was made by Harmonix?",
-    "correct_answer": "Rock Band",
-    "incorrect_answers": ["Meat Beat Mania", "Guitar Hero Live", "Dance Dance Revolution"]
-  }]
-}
 
 const TYPE = [
   {"value": "any", "text": "Any Type"},
@@ -416,7 +394,6 @@ window.addEventListener("load", function() {
     softKeyText: { left: 'Help', center: 'SELECT', right: 'Exit' },
     softKeyListener: {
       left: function() {
-        // startQuiz(this.$router, SEED.results);
         this.$router.push('helpSupportPage');
       },
       center: function() {
