@@ -13,32 +13,35 @@
     }
   </style>
   <div class="kai-container" style="margin:5px;font-size:90%;">
-    <div class="spacer">
-      <div class="title">Question</div>
-      <div class="caption">{{ question.question }}</div>
+    <span id="comma" class="sr-only" tabIndex="0">,</span>
+    <span id="instruction" class="sr-only" tabIndex="1">Press Call button to listen the question. Press Left Key to select the answer. Press Right Key to submit the answer. Press 0 to repeat the instruction.</span>
+    <span id="question" class="sr-only" tabIndex="2">{{ num }}, {{ question.question }} ? Difficulty is {{ question.difficulty }}. Category is {{ question.category }}.{{#finish}} Your answer is {{ question.your_answer }}, correct answer is {{ question.correct_answer }}.{{/finish}}{{^finish}} Your answer is {{ question.your_answer }}{{/finish}}</span>
+    <div class="spacer quizNav">
+      <div aria-hidden="true" class="title">{{ num }}</div>
+      <div aria-hidden="true" class="caption">{{ question.question }}</div>
     </div>
-    <div class="spacer">
-      <span class="title">Difficulty:</span>
-      <span class="caption">{{ question.difficulty }}</span>
+    <div class="spacer quizNav">
+      <span aria-hidden="true" class="title">Difficulty:</span>
+      <span aria-hidden="true" class="caption">{{ question.difficulty }}</span>
     </div>
-    <div class="spacer">
-      <div class="title">Category:</div>
-      <div class="caption">{{ question.category }}</div>
+    <div class="spacer quizNav">
+      <div aria-hidden="true" class="title">Category:</div>
+      <div aria-hidden="true" class="caption">{{ question.category }}</div>
     </div>
     {{#finish}}
-    <div class="spacer">
-      <div class="title">Your Answer:</div>
-      <div class="caption" style="color:{{#question.correct}}green{{/question.correct}}{{^question.correct}}red{{/question.correct}};">{{ question.your_answer }}</div>
+    <div class="spacer quizNav">
+      <div aria-hidden="true" class="title">Your Answer:</div>
+      <div aria-hidden="true" class="caption" style="color:{{#question.correct}}green{{/question.correct}}{{^question.correct}}red{{/question.correct}};">{{ question.your_answer }}</div>
     </div>
-    <div class="spacer">
-      <div class="title">Correct Answer:</div>
-      <div class="caption" style="">{{ question.correct_answer }}</div>
+    <div class="spacer quizNav">
+      <div aria-hidden="true" class="title">Correct Answer:</div>
+      <div aria-hidden="true" class="caption" style="">{{ question.correct_answer }}</div>
     </div>
     {{/finish}}
     {{^finish}}
-    <div class="spacer">
-      <div class="title">Your Answer:</div>
-      <div class="caption" style="">{{ question.your_answer }}</div>
+    <div class="spacer quizNav">
+      <div aria-hidden="true" class="title">Your Answer:</div>
+      <div aria-hidden="true" class="caption" style="">{{ question.your_answer }}</div>
     </div>
     {{/finish}}
   </div>

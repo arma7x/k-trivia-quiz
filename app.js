@@ -1,3 +1,25 @@
+const pushLocalNotification = function(text) {
+  window.Notification.requestPermission().then(function(result) {
+    var notification = new window.Notification(text);
+      notification.onclick = function(event) {
+        if (window.navigator.mozApps) {
+          var request = window.navigator.mozApps.getSelf();
+          request.onsuccess = function() {
+            if (request.result) {
+              notification.close();
+              request.result.launch();
+            }
+          };
+        } else {
+          window.open(document.location.origin, '_blank');
+        }
+      }
+      notification.onshow = function() {
+        notification.close();
+      }
+  });
+}
+
 const xhr = function(method, url, data={}, query={}, headers={}) {
   return new Promise((resolve, reject) => {
     var xhttp = new XMLHttpRequest();
@@ -47,7 +69,7 @@ const CATEGORY = [
   {"value": "14", "text": "Entertainment: Television"},
   {"value": "15", "text": "Entertainment: Video Games"},
   {"value": "16", "text": "Entertainment: Board Games"},
-  {"value": "17", "text": "Science &amp; Nature"},
+  {"value": "17", "text": "Science and Nature"},
   {"value": "18", "text": "Science: Computers"},
   {"value": "19", "text": "Science: Mathematics"},
   {"value": "20", "text": "Mythology"},
@@ -61,8 +83,8 @@ const CATEGORY = [
   {"value": "28", "text": "Vehicles"},
   {"value": "29", "text": "Entertainment: Comics"},
   {"value": "30", "text": "Science: Gadgets"},
-  {"value": "31", "text": "Entertainment: Japanese Anime &amp; Manga"},
-  {"value": "32", "text": "Entertainment: Cartoon &amp; Animations"},
+  {"value": "31", "text": "Entertainment: Japanese Anime and Manga"},
+  {"value": "32", "text": "Entertainment: Cartoon and Animations"},
 ]
 
 const DIFFICULTY = [
@@ -75,7 +97,7 @@ const DIFFICULTY = [
 const TYPE = [
   {"value": "any", "text": "Any Type"},
   {"value": "multiple", "text": "Multiple Choice"},
-  {"value": "boolean", "text": "True/False"},
+  {"value": "boolean", "text": "True or False"},
 ]
 
 function shuffleArray(array) {
@@ -96,10 +118,10 @@ window.addEventListener("load", function() {
     questions.forEach((_, i) => {
       for (var x in questions[i]) {
         if (typeof questions[i][x] === 'string') {
-          questions[i][x] = atob(questions[i][x]);
+          questions[i][x] = decodeURIComponent(questions[i][x]);
         } else if (typeof questions[i][x] === 'object' && questions[i][x].length !== undefined) {
           for (var y in questions[i][x]) {
-            questions[i][x][y] = atob(questions[i][x][y]);
+            questions[i][x][y] = decodeURIComponent(questions[i][x][y]);
           }
         }
       }
@@ -117,28 +139,52 @@ window.addEventListener("load", function() {
           finish: false,
           question: {},
           index: 0,
+          num: 0,
         },
         templateUrl: document.location.origin + '/templates/quizPaper.html',
         mounted: function() {
           this.methods.renderQuestion(this.data.index);
+          document.addEventListener('keydown', this.methods.listenButton);
+          document.getElementById('instruction').focus();
         },
-        unmounted: function() {},
+        unmounted: function() {
+          document.removeEventListener('keydown', this.methods.listenButton);
+        },
         methods: {
+          listenButton: function(evt) {
+            if ($router.bottomSheet)
+              return
+            if (document.activeElement) {
+              document.activeElement.blur();
+            }
+            if (evt.key == 'Call' || evt.key == '0') {
+              this.methods.renderQuestion(this.data.index);
+              setTimeout(() => {
+                if (evt.key == 'Call') {
+                  document.getElementById('question').focus();
+                } else if (evt.key == '0') {
+                  document.getElementById('instruction').focus();
+                }
+              }, 100);
+            }
+          },
           renderQuestion: function(idx) {
             this.setData({
-              question: questions[idx]
+              num: idx === (questions.length - 1) ? 'Last question' : `Question ${idx + 1}`,
+              question: questions[idx],
             });
             this.$router.setHeaderTitle(`Question ${idx+1}/${LEN}`);
             if (!this.data.finish) {
               this.$router.setSoftKeyText('Answers', '', 'Submit');
             } else {
-              this.$router.setSoftKeyText('', 'Score', '');
+              this.$router.setSoftKeyText('', 'SCORE', '');
             } 
           },
           showScore: function() {
             displayKaiAds();
-            this.$router.showDialog('Score', `Your score is ${this.data.score}/${LEN}`, null, ' ', () => {}, ' ', () => {}, ' ', null, () => {
-                this.methods.renderQuestion(this.data.index);
+            this.$router.showDialog('Score', `<div class="kai-list-nav"><span class="sr-only">Your score is ${this.data.score} out of ${LEN} questions. Press arrow left or arrow right to review all questions. Press Back key to close this message.</span><span aria-hidden="true">Your score is ${this.data.score} out of ${LEN} questions</span></div>`, null, ' ', () => {}, ' ', () => {}, ' ', null, () => {
+              this.data.index = 0;
+              this.methods.listenButton({ key: 'Call' });
             });
           }
         },
@@ -162,6 +208,7 @@ window.addEventListener("load", function() {
               });
             }, 'Cancel', null, () => {
               this.methods.renderQuestion(this.data.index);
+              this.methods.listenButton({ key: 'Call' });
             }, (idx > -1 ? idx : 0));
           },
           center: function() {
@@ -174,10 +221,10 @@ window.addEventListener("load", function() {
               return
             const a = questions[this.data.index]['your_answer'];
             if (a == '') {
-              this.$router.showToast("Please pick the answer");
+              pushLocalNotification("Please select the answer");
               return
             }
-            this.$router.showDialog('Confirm', `Are you sure to submit ${questions[this.data.index]['your_answer']} ?`, null, 'Yes', () => {
+            this.$router.showDialog('Confirm', `<div class="kai-list-nav"><span class="sr-only">Are you sure to submit ${questions[this.data.index]['your_answer']}?. Press Left key to return. Press Right key to continue.</span><span aria-hidden="true">Are you sure to submit ${questions[this.data.index]['your_answer']}?</span></div>`, null, 'Yes', () => {
               if (questions[this.data.index + 1]) {
                 this.data.index += 1;
                 this.$router.showToast(`Question ${this.data.index+1}`);
@@ -197,6 +244,7 @@ window.addEventListener("load", function() {
                 setTimeout(this.methods.showScore, 100);
               }
               this.methods.renderQuestion(this.data.index);
+              this.methods.listenButton({ key: 'Call' });
             }, 'No', () => {}, ' ', null, () => {
               this.methods.renderQuestion(this.data.index);
             });
@@ -209,6 +257,7 @@ window.addEventListener("load", function() {
             if (questions[this.data.index - 1]) {
               this.data.index -= 1;
               this.methods.renderQuestion(this.data.index);
+              this.methods.listenButton({ key: 'Call' });
             }
           },
           arrowRight: function() {
@@ -217,11 +266,12 @@ window.addEventListener("load", function() {
             if (questions[this.data.index + 1]) {
               this.data.index += 1;
               this.methods.renderQuestion(this.data.index);
+              this.methods.listenButton({ key: 'Call' });
             }
           }
         },
         backKeyListener: function() {
-          this.$router.showDialog('Quit', 'Are you sure to quit ?', null, 'Yes', () => {
+          this.$router.showDialog('Quit', '<div class="kai-list-nav"><span class="sr-only">Are you sure to quit ? Right Key Yes. Left Key No.</span><span aria-hidden="true">Are you sure to quit ?</span></div>', null, 'Yes', () => {
               $router.pop();
             }, 'No', () => {}, ' ', null, () => {
               this.methods.renderQuestion(this.data.index);
@@ -279,7 +329,7 @@ window.addEventListener("load", function() {
       }
     },
     unmounted: function() {
-      
+      this.verticalNavIndex = -1;
     },
     methods: {
       getToken: function() {
@@ -337,7 +387,7 @@ window.addEventListener("load", function() {
         try {
           const amount = JSON.parse(document.getElementById('amount').value);
           if (amount > 50) {
-            this.$router.showToast("Max num of question is 50");
+            pushLocalNotification("Maximum number of question is 50");
             return
           }
           var q = `amount=${amount}`;
@@ -351,7 +401,7 @@ window.addEventListener("load", function() {
           if (this.data.type.value !== 'any') {
             q += `&type=${this.data.type.value}`
           }
-          q += `&encode=base64`;
+          q += `&encode=url3986`;
           this.$router.showLoading();
           xhr('GET', `https://opentdb.com/api.php?${q}`)
           .then((data) => {
@@ -365,16 +415,16 @@ window.addEventListener("load", function() {
                 startQuiz(this.$router, data.response.results);
                 break;
               case 1:
-                this.$router.showToast("The API doesn't have enough questions");
+                pushLocalNotification("The API doesn't have enough questions");
                 break;
               case 2:
-                this.$router.showToast("Invalid Parameter");
+                pushLocalNotification("Invalid Parameter");
                 break;
               case 3:
-                this.$router.showToast("Token Not Found, please Exit app");
+                pushLocalNotification("Token Not Found, please Exit app");
                 break;
               case 4:
-                // this.$router.showToast("Token Not Found");
+                // pushLocalNotification("Token Not Found");
                 break;
               }
           })
@@ -386,7 +436,7 @@ window.addEventListener("load", function() {
           });
         } catch(e) {
           console.log(document.getElementById('amount').value);
-          this.$router.showToast("Please enter num of question");
+          pushLocalNotification("Please enter number of question");
         }
         
       }
@@ -403,7 +453,7 @@ window.addEventListener("load", function() {
         }
       },
       right: function() {
-        this.$router.showDialog('Exit', 'Are you sure to exit ?', null, 'Yes', () => {
+        this.$router.showDialog('Exit', '<div class="kai-list-nav"><span class="sr-only">Are you sure to exit ? Right Key Yes. Left Key No.</span><span aria-hidden="true">Are you sure to exit ?</span></div>', null, 'Yes', () => {
           window.close();
         }, 'No', () => {}, ' ', null, () => {});
       }
@@ -474,11 +524,28 @@ window.addEventListener("load", function() {
       app: 'trivia-quiz',
       slot: 'kaios',
       onerror: err => console.error(err),
-      onready: ad => {
-        ad.call('display')
-        setTimeout(() => {
+            onready: ad => {
+        if (document.activeElement) {
+          document.activeElement.classList.remove('focus');
+        }
+        ad.call('display');
+        ad.on('close', () => {
           document.body.style.position = '';
-        }, 1000);
+          const screen = app.$router.stack[app.$router.stack.length - 1];
+          if (screen) {
+            screen.verticalNavIndex = -1;
+            setTimeout(() => {
+              screen.navigateListNav(1);
+            }, 200);
+          }
+        });
+        ad.on('display', () => {
+          document.body.style.position = '';
+          if (app.$router.bottomSheet) {
+            app.$router.hideBottomSheet();
+          }
+          app.$router.showDialog('KaiAds', `<div class="kai-list-nav"><span class="sr-only">Ads was displayed. press Left key to close.</span><span aria-hidden="true">Ads was displayed, press Left key to close</span></div>`, null, ' ', () => {}, 'Close', () => {}, ' ', () => {}, () => {});
+        });
       }
     })
   }

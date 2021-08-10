@@ -12,29 +12,33 @@
   </style>
   <ul class="kui-list kai-container">
     <li>
-      <input id="amount" class="homeNav kui-input" type="tel" placeholder="Num of question" value="{{ amount }}"/>
+      <label for="amount" class="sr-only">Please enter number Of question.</label>
+      <input aria-hidden="true" id="amount" name="amount" class="homeNav kui-input" type="tel" placeholder="Num of question" value="{{ amount }}"/>
     </li>
     <li class="homeNav" @click="selectCategory()">
-      <div class="spacer">
+      <span class="sr-only">Please select the category: {{ category.text }}</span>
+      <div aria-hidden="true" class="spacer">
         <div style="font-size:95%;">Please select category:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ category.text }}</div>
       </div>
     </li>
     <li class="homeNav" @click="selectDifficulty()">
-      <div class="spacer">
+      <span class="sr-only">Please select the difficulty: {{ difficulty.text }}</span>
+      <div aria-hidden="true" class="spacer">
         <div style="font-size:95%;">Please select difficulty:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ difficulty.text }}</div>
       </div>
     </li>
     <li class="homeNav" @click="selectType()">
-      <div class="spacer">
-        <div style="font-size:95%;">Please select type:</div>
+      <span class="sr-only">Please select the type of answer: {{ type.text }}</span>
+      <div aria-hidden="true" class="spacer">
+        <div style="font-size:95%;">Please select type of answer:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ type.text }}</div>
       </div>
     </li>
     <li class="homeNav" @click="submit()">
       <div class="kui-row-center" style="justify-content:space-around;">
-        <h4>SUBMIT</h4>
+        <h4>GENERATE QUIZ</h4>
       </div>
     </li>
   </ul>

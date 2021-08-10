@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "Trivia Quiz",
   "description": "Get smarter every day by answering online quizzes & improve your knowledge in various fields",
   "launch_path": "/index.html",
@@ -19,8 +19,16 @@
   },
   "origin": "app://trivia-quiz.arma7x.com",
   "type": "web",
-  "permissions": {},
-  "messages": [],
+  "permissions": {
+    "desktop-notification": {
+      "description": "Required for displaying alerts when app is on background"
+    }
+  },
+  "messages": [
+    {
+      "serviceworker-notification": "/index.html"
+    }
+  ],
   "locales": {
     "en-US": {
       "name": "Trivia Quiz",
