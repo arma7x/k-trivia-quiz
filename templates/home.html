@@ -7,36 +7,35 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-bottom: 2px solid #320374;
     }
   </style>
   <ul class="kui-list kai-container">
-    <li>
+    <li class="kui-divider">
       <label for="amount" class="sr-only">Please enter number Of question.</label>
       <input aria-hidden="true" id="amount" name="amount" class="homeNav kui-input" type="tel" placeholder="Num of question" value="{{ amount }}"/>
     </li>
-    <li class="homeNav" @click="selectCategory()">
+    <li class="homeNav kui-divider" @click="selectCategory()">
       <span class="sr-only">Please select the category: {{ category.text }}</span>
       <div aria-hidden="true" class="spacer">
         <div style="font-size:95%;">Please select category:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ category.text }}</div>
       </div>
     </li>
-    <li class="homeNav" @click="selectDifficulty()">
+    <li class="homeNav kui-divider" @click="selectDifficulty()">
       <span class="sr-only">Please select the difficulty: {{ difficulty.text }}</span>
       <div aria-hidden="true" class="spacer">
         <div style="font-size:95%;">Please select difficulty:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ difficulty.text }}</div>
       </div>
     </li>
-    <li class="homeNav" @click="selectType()">
+    <li class="homeNav kui-divider" @click="selectType()">
       <span class="sr-only">Please select the type of answer: {{ type.text }}</span>
       <div aria-hidden="true" class="spacer">
         <div style="font-size:95%;">Please select type of answer:</div>
         <div style="font-weight:400;margin-bottom:2px;">{{ type.text }}</div>
       </div>
     </li>
-    <li class="homeNav" @click="submit()">
+    <li class="homeNav kui-divider" @click="submit()">
       <div class="kui-row-center" style="justify-content:space-around;">
         <h4>GENERATE QUIZ</h4>
       </div>
