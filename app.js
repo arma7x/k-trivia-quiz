@@ -21,6 +21,7 @@ const pushLocalNotification = function(text) {
 }
 
 const xhr = function(method, url, data={}, query={}, headers={}) {
+  url = `https://cors.bridged.cc/${url}`;
   return new Promise((resolve, reject) => {
     var xhttp = new XMLHttpRequest();
     var _url = new URL(url);
