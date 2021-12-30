@@ -24,7 +24,7 @@
     }
   ],
   "b2g_features": {
-    "version": "3.0.2",
+    "version": "3.0.4",
     "type": "web",
     "default_locale": "en-US",
     "developer": {
@@ -36,6 +36,9 @@
       "desktop-notification": {
         "description": "Required for displaying alerts when app is on background"
       }
+    },
+    "dependencies": {
+      "ads-sdk": "1.5.3"
     },
     "messages": [
       {
