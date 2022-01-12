@@ -542,10 +542,7 @@ window.addEventListener("load", function() {
         });
         ad.on('display', () => {
           document.body.style.position = '';
-          if (app.$router.bottomSheet) {
-            app.$router.hideBottomSheet();
-          }
-          app.$router.showDialog('KaiAds', `<div class="kai-list-nav"><span class="sr-only">Ads was displayed. press Left key to close.</span><span aria-hidden="true">Ads was displayed, press Left key to close</span></div>`, null, ' ', () => {}, 'Close', () => {}, ' ', () => {}, () => {});
+          pushLocalNotification('Ads was displayed. press Left key to close');
         });
       }
     })
