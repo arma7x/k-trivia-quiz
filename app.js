@@ -21,7 +21,7 @@ const pushLocalNotification = function(text) {
 }
 
 const xhr = function(method, url, data={}, query={}, headers={}) {
-  url = `https://kaios.tri1.workers.dev/?url=${encodeURIComponent(url)}`;
+  url = `https://malaysiaapi.herokuapp.com/proxy?url=${encodeURIComponent(url)}`;
   return new Promise((resolve, reject) => {
     var xhttp = new XMLHttpRequest();
     var _url = new URL(url);
